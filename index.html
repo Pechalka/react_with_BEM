@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="style.css">
+	<script src="http://fb.me/JSXTransformer-0.12.1.js"></script>
+	<script src="http://fb.me/react-with-addons-0.12.1.js"></script>
+
+	<script type="text/jsx;harmony=true" language="JavaScript 1.7">
+var cx = React.addons.classSet;
+
+var BEM = {
+    bem : function(css){
+        css = css || {};
+        var elementCss = this.props.block + "__" + this.constructor.displayName; 
+        css[elementCss] = true;
+        if (this.props.mods)
+            for(var key in this.props.mods){
+                css[elementCss + "__" + key] = this.props.mods[key];
+            }
+        return cx(css)
+    },
+    element : function(e, css){
+        e.props.className = this.bem(css);
+        return e;
+    },   
+    block : function(b){
+        var blockName = this.constructor.displayName; 
+        b.props.className = blockName;
+        b.props.children.forEach((e) => {
+            e.props.block = blockName;   
+        })
+        return b;
+    }
+}
+
+
+var Item = React.createClass({
+    displayName : 'item',
+    mixins : [BEM],
+    render : function(){
+        return this.element(<li onClick={this.props.onClick} >
+            {this.props.children} 
+        </li>)
+    }
+})
+
+
+var Menu = React.createClass({
+    displayName : 'menu',
+    mixins : [BEM],
+    getInitialState : function(){
+        return {
+            selectedItem : null
+        }
+    },
+    selectItem : function(n){
+        this.setState({
+            selectedItem : n
+        })        
+    },
+    
+    render : function(){
+        var items = [1, 2].map((n)=>{
+            var mods = {
+                first : n == 1,
+                selected : n === this.state.selectedItem
+            }
+            return <Item mods={mods} onClick={this.selectItem.bind(this, n)}>{n}</Item> 
+        })
+        return this.block(<ul >
+            {items}
+        </ul>)
+    }    
+})
+
+var App = React.createClass({
+    render: function() {
+        return <div>
+            <Menu />
+        </div>;
+    }
+});
+ 
+React.render(<App  />, document.body);
+//]]> 
+</script>
+
+</head>
+<body>
+	
+</body>
+</html>

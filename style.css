@@ -1,0 +1,16 @@
+.menu {
+    color : red;
+    list-style : none;
+}
+
+.menu__item {
+    background : green;
+}
+
+.menu__item__selected {
+    background : yellow;
+}
+
+.menu__item__first {
+    color : #fff;
+}
